@@ -2,7 +2,6 @@ package urlNavigator;
 
 
 import io.restassured.RestAssured;
-import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
 import io.restassured.http.Method;
 import io.restassured.response.Response;
@@ -15,10 +14,10 @@ public class Navigator {
         RestAssured.reset();
     }
 
-    public Response sendRequest(String url, ContentType type, Method method, Object object) {
+    public Response sendRequestWithoutAuth(String url, ContentType type, Method method, int expectedCode, Object object) {
         this.reset();
 
-        Specifications.initSpecifications(Specifications.requestSpec(url, type), Specifications.responseSpec(200));
+        Specifications.initSpecifications(Specifications.requestSpec(url, type), Specifications.responseSpec(expectedCode));
 
         Response response = given()
                     .body(object)
@@ -30,10 +29,10 @@ public class Navigator {
         return response;
     }
 
-    public Response sendRequestAuth(String url, ContentType type, Method method, Object object, String token) {
+    public Response sendRequest(String url, ContentType type, Method method, int expectedCode, Object object, String token) {
         this.reset();
 
-        Specifications.initSpecifications(Specifications.requestSpec(url, type), Specifications.responseSpec(200));
+        Specifications.initSpecifications(Specifications.requestSpec(url, type), Specifications.responseSpec(expectedCode));
 
         Response response = given()
                 .body(object)
